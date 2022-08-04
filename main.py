@@ -41,44 +41,15 @@ if __name__ == '__main__':
 
     centered_gibbs = GibbsSampler(config.NSIDE, config.L_MAX_SCALARS, config.noise_covar_I, config.noise_covar_Q,
                                   config.fwhm_radians, config.proposal_variance
-                                   ,pixel_map, n_iter=100, n_iter_grwmh=100, gibbs_cr=False, mask_path=None)
+                                   ,pixel_map, n_iter=10, n_iter_grwmh=1, gibbs_cr=False, mask_path=None)
 
     #crankN = CrankNicolson(config.NSIDE, config.L_MAX_SCALARS, config.noise_covar_I,
     #                       config.noise_covar_Q, config.fwhm_radians, pixel_map, mask_path = None, pcg_accuracy=1e-6,
     #             gibbs_cr = False, overrelax=False, beta = 0.2)
 
-    all_cls = np.zeros((len(cls_TT_true), 3, 3))
-    all_cls[:, 0, 0] = cls_TT_true
-    all_cls[:, 1, 1] = cls_EE_true
-    all_cls[:, 2, 2] = cls_BB_true
-    all_cls[:, 1, 0] = all_cls[:, 0, 1] = cls_TE_true
 
-    h = []
-    old_s_pix = np.zeros((config.Npix, 3))
-    acceptions = []
-    start = time.time()
-    for i in range(10000):
-        print(i)
-        old_s_pix, accept = crankN.run(deepcopy(old_s_pix), all_cls)
-        print(accept)
-        acceptions.append(accept)
-        h.append(old_s_pix[2000, 0])
+    res = centered_gibbs.run(config.COSMO_PARAMS_MEAN)
 
-
-
-    end = time.time()
-    print("Time:", end - start)
-    print("Acceptance rate:", np.mean(acceptions))
-
-
-    h = np.array(h)
-
-    print("Mean:", np.mean(h))
-    plt.plot(h)
-    plt.show()
-
-    plt.hist(h, density=True, bins=25)
-    plt.show()
     """
     theta_init = config.COSMO_PARAMS_MEAN
     alms_T, alms_E, alms_B = hp.synalm([cls_TT_true, cls_EE_true, cls_BB_true, cls_TE_true], lmax=config.L_MAX_SCALARS, new=True)
