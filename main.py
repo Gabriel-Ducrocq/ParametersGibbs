@@ -41,7 +41,7 @@ if __name__ == '__main__':
 
     centered_gibbs = GibbsSampler(config.NSIDE, config.L_MAX_SCALARS, config.noise_covar_I, config.noise_covar_Q,
                                   config.fwhm_radians, config.proposal_variance
-                                   ,pixel_map, n_iter=10, n_iter_grwmh=1, gibbs_cr=False, mask_path=None)
+                                   ,pixel_map, n_iter=100, n_iter_grwmh=1, gibbs_cr=False, mask_path=None)
 
     #crankN = CrankNicolson(config.NSIDE, config.L_MAX_SCALARS, config.noise_covar_I,
     #                       config.noise_covar_Q, config.fwhm_radians, pixel_map, mask_path = None, pcg_accuracy=1e-6,
