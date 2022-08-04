@@ -80,18 +80,18 @@ class GRWMH():
 
     def run(self, init_params, init_cls, init_inv_cls,  alm_map):
         acceptions = []
-        h_params = []
+        #h_params = []
         old_params = init_params
         old_inv_cls = init_inv_cls
         old_cls = init_cls
         for i in range(self.n_iter):
             old_params, old_cls, old_inv_cls, accept = self.run_step(old_params, old_cls, old_inv_cls, alm_map)
             acceptions.append(accept)
-            h_params.append(old_params)
+            #h_params.append(old_params)
 
         print("Acceptance rate:")
         print(np.mean(acceptions))
-        return old_params, old_cls, old_inv_cls, acceptions, h_params
+        return old_params, old_cls, old_inv_cls, acceptions#, h_params
 
 
 

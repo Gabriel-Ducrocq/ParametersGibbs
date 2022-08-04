@@ -64,7 +64,7 @@ def matrix_product(dls_, b):
     return result
 
 
-@njit()
+@njit(parallel=True)
 def invert_2x2_matrix(m):
     """
 
