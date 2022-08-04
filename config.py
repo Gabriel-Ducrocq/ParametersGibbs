@@ -78,4 +78,4 @@ proposal_variance = 0.02*COSMO_PARAMS_SIGMA
 #data_pncp = np.load("data_pncp.npy", allow_pickle=True)
 #data_pncp = data_pncp.item()
 #h_theta_pncp = data_pncp["h_theta"]
-p#roposal_variance_pncp_gibbs = 0.05*(2.4/np.sqrt(5))*np.cov(h_theta_pncp.transpose())
+#roposal_variance_pncp_gibbs = 0.05*(2.4/np.sqrt(5))*np.cov(h_theta_pncp.transpose())
