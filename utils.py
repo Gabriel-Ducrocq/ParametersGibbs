@@ -1,7 +1,7 @@
 from classy import Class
 import config
 import numpy as np
-from numba import prange, njit, complex128
+from numba import prange, njit, complex128, jit
 
 cosmo = Class()
 
