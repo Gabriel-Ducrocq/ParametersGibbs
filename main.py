@@ -43,14 +43,14 @@ if __name__ == '__main__':
                                   config.fwhm_radians, config.proposal_variance
                                    ,pixel_map, n_iter=100, n_iter_grwmh=100, gibbs_cr=False, mask_path=None)
 
-    crankN = CrankNicolson(config.NSIDE, config.L_MAX_SCALARS, config.noise_covar_I,
-                           config.noise_covar_Q, config.fwhm_radians, pixel_map, mask_path = None, pcg_accuracy=1e-6,
-                 gibbs_cr = False, overrelax=False, beta = 0.2)
+    #crankN = CrankNicolson(config.NSIDE, config.L_MAX_SCALARS, config.noise_covar_I,
+    #                       config.noise_covar_Q, config.fwhm_radians, pixel_map, mask_path = None, pcg_accuracy=1e-6,
+    #             gibbs_cr = False, overrelax=False, beta = 0.2)
 
     all_cls = np.zeros((len(cls_TT_true), 3, 3))
     all_cls[:, 0, 0] = cls_TT_true
     all_cls[:, 1, 1] = cls_EE_true
-    all_cls[:, 2, 2] = cls_BB_trueq
+    all_cls[:, 2, 2] = cls_BB_true
     all_cls[:, 1, 0] = all_cls[:, 0, 1] = cls_TE_true
 
     h = []

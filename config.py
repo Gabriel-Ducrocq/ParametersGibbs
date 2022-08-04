@@ -50,32 +50,32 @@ proposal_variance = 0.02*COSMO_PARAMS_SIGMA
 #proposal_variance_gibbs_nc_asis = 0.006*COSMO_PARAMS_SIGMA**2
 
 
-data_direct = np.load("data_direct.npy", allow_pickle=True)
-data_direct = data_direct.item()
-h_theta_direct = data_direct["h_theta"]
-proposal_variance_direct = (2.4/np.sqrt(6))*np.cov(h_theta_direct.transpose())
+#data_direct = np.load("data_direct.npy", allow_pickle=True)
+#data_direct = data_direct.item()
+#h_theta_direct = data_direct["h_theta"]
+#roposal_variance_direct = (2.4/np.sqrt(6))*np.cov(h_theta_direct.transpose())
 
-data_centered_gibbs = np.load("data_centered_gibbs.npy", allow_pickle = True)
-data_centered_gibbs = data_centered_gibbs.item()
-h_theta_centered = data_centered_gibbs["h_theta"]
+#data_centered_gibbs = np.load("data_centered_gibbs.npy", allow_pickle = True)
+#data_centered_gibbs = data_centered_gibbs.item()
+#h_theta_centered = data_centered_gibbs["h_theta"]
 #proposal_variance = 0.2*(2.4/np.sqrt(6))*np.cov(h_theta_centered.transpose())
 #proposal_variance_gibbs = 0.095*proposal_variance_direct
 
 
-data_asis = np.load("data_asis.npy", allow_pickle=True)
-data_asis = data_asis.item()
-h_theta_asis = data_asis["h_theta"]
-proposal_variance_gibbs_asis = 0.3*(2.4/np.sqrt(6))*np.cov(h_theta_asis.transpose())
-proposal_variance_gibbs_nc_asis = 0.02*(2.4/np.sqrt(6))*np.cov(h_theta_asis.transpose())
+#data_asis = np.load("data_asis.npy", allow_pickle=True)
+#data_asis = data_asis.item()
+#h_theta_asis = data_asis["h_theta"]
+#proposal_variance_gibbs_asis = 0.3*(2.4/np.sqrt(6))*np.cov(h_theta_asis.transpose())
+#proposal_variance_gibbs_nc_asis = 0.02*(2.4/np.sqrt(6))*np.cov(h_theta_asis.transpose())
 
 
-data_rescale = np.load("data_rescale.npy", allow_pickle=True)
-data_rescale = data_rescale.item()
-h_theta_rescale = data_rescale["h_theta"]
-proposal_variance_rescale = (2.4/np.sqrt(5))*np.cov(h_theta_rescale.transpose())
+#data_rescale = np.load("data_rescale.npy", allow_pickle=True)
+#data_rescale = data_rescale.item()
+#h_theta_rescale = data_rescale["h_theta"]
+#proposal_variance_rescale = (2.4/np.sqrt(5))*np.cov(h_theta_rescale.transpose())
 
 
-data_pncp = np.load("data_pncp.npy", allow_pickle=True)
-data_pncp = data_pncp.item()
-h_theta_pncp = data_pncp["h_theta"]
-proposal_variance_pncp_gibbs = 0.05*(2.4/np.sqrt(5))*np.cov(h_theta_pncp.transpose())
+#data_pncp = np.load("data_pncp.npy", allow_pickle=True)
+#data_pncp = data_pncp.item()
+#h_theta_pncp = data_pncp["h_theta"]
+p#roposal_variance_pncp_gibbs = 0.05*(2.4/np.sqrt(5))*np.cov(h_theta_pncp.transpose())
