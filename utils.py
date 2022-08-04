@@ -122,7 +122,7 @@ def compute_cholesky(m):
     return cholesky_m
 
 
-@njit(parallel=False)
+#@njit(parallel=False)
 def compute_inverse_and_cholesky_constraint_realization(all_cls, add_term=None):
     """
 

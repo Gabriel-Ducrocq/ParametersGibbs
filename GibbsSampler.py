@@ -590,6 +590,8 @@ class GibbsSampler():
         all_cls[:, 1, 1] = cls_ee
         all_cls[:, 2, 2] = cls_bb
         all_cls[:, 0, 1] = all_cls[:, 1, 0] = cls_te
+
+        print(all_cls)
         inv_cls, _ = utils.compute_inverse_and_cholesky_constraint_realization(all_cls)
 
         alm_map = None
