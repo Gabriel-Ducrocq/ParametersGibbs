@@ -8,7 +8,7 @@ import matplotlib.pyplot as plt
 
 
 class GRWMH():
-    def __init__(self, l_max, map, proposal_variance, prio_mean, prior_stdd, dim = 3, n_iterations=100):
+    def __init__(self, l_max, map, proposal_variance, prio_mean, prior_stdd, dim = 6, n_iterations=100):
         self.lmax = l_max
         self.map = map
         self.dim = dim
@@ -67,7 +67,7 @@ class GRWMH():
 
         for i in range(self.n_iterations):
             print(i)
-            new_data = self.propose_new_parameters(init_params)
+            new_data = self.propose_new_parameters(data["params"])
             log_ratio = self.compute_log_MH_ratio(data, new_data)
             if np.log(np.random.uniform()) < log_ratio:
                 data = copy.deepcopy(new_data)
