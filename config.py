@@ -40,7 +40,7 @@ beam = np.array([bl for l, bl in enumerate(bl_gauss, start=2) for i in range(2 *
 l_cut = 555
 cpt = 10
 
-proposal_variance = 0.002*COSMO_PARAMS_SIGMA
+proposal_variance = 0.005*COSMO_PARAMS_SIGMA
 #proposal_variance_gibbs = 0.05*COSMO_PARAMS_SIGMA**2
 #proposal_variance_pncp_gibbs = 0.015*COSMO_PARAMS_SIGMA**2
 #proposal_variance_rescale = 0.2*COSMO_PARAMS_SIGMA**2

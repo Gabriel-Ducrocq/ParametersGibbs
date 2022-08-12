@@ -80,6 +80,7 @@ class GRWMH():
 
 
 if __name__ == '__main__':
+    """
     theta_true = config.COSMO_PARAMS_MEAN # + config.COSMO_PARAMS_SIGMA
     cls_TT_true, cls_EE_true, cls_BB_true, cls_TE_true = utils.generate_cls(theta_true)
     alm_map_T, alm_map_E, alm_map_B = hp.synalm([cls_TT_true, cls_EE_true, cls_BB_true, cls_TE_true], new=True)
@@ -90,7 +91,12 @@ if __name__ == '__main__':
     data[:, 2] = alm_map_B
 
     np.save("data.npy", data)
+    """
+    data = np.load("data.npy")
+    data = data.items()
 
     grwmh = GRWMH(config.L_MAX_SCALARS, data, config.proposal_variance, config.COSMO_PARAMS_MEAN, config.COSMO_PARAMS_SIGMA)
     result = grwmh.run(config.COSMO_PARAMS_MEAN)
+
+    np.save("outcome.npy", result)
 
