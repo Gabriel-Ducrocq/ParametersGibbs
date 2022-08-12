@@ -49,8 +49,8 @@ def matrix_product(dls_, b):
     complex_dim = int((config.L_MAX_SCALARS + 1) * (config.L_MAX_SCALARS + 2) / 2)
     #alms_shape = np.zeros((complex_dim, 3, 3), dtype=complex128)
     #result = np.zeros((complex_dim, 3), dtype=complex128)
-    alms_shape = np.zeros((complex_dim, 3, 3), dtype=np.complex)
-    result = np.zeros((complex_dim, 3), dtype=np.complex)
+    alms_shape = np.zeros((complex_dim, 3, 3), dtype=np.complex128)
+    result = np.zeros((complex_dim, 3), dtype=np.complex128)
 
     for l in prange(config.L_MAX_SCALARS + 1):
         for m in range(l + 1):
