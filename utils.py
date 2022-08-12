@@ -38,7 +38,7 @@ def generate_var_cls(cls):
 
 
 
-@njit(parallel=True)
+#@njit(parallel=True)
 def matrix_product(dls_, b):
     """
 
