@@ -47,8 +47,10 @@ def matrix_product(dls_, b):
     :return: the product of the (inverse) signal covariance matrix and the vector of alms.
     """
     complex_dim = int((config.L_MAX_SCALARS + 1) * (config.L_MAX_SCALARS + 2) / 2)
-    alms_shape = np.zeros((complex_dim, 3, 3), dtype=complex128)
-    result = np.zeros((complex_dim, 3), dtype=complex128)
+    #alms_shape = np.zeros((complex_dim, 3, 3), dtype=complex128)
+    #result = np.zeros((complex_dim, 3), dtype=complex128)
+    alms_shape = np.zeros((complex_dim, 3, 3), dtype=np.complex)
+    result = np.zeros((complex_dim, 3), dtype=np.complex)
 
     for l in prange(config.L_MAX_SCALARS + 1):
         for m in range(l + 1):

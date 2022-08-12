@@ -84,7 +84,7 @@ if __name__ == '__main__':
     cls_TT_true, cls_EE_true, cls_BB_true, cls_TE_true = utils.generate_cls(theta_true)
     alm_map_T, alm_map_E, alm_map_B = hp.synalm([cls_TT_true, cls_EE_true, cls_BB_true, cls_TE_true], new=True)
 
-    data = np.zeros((len(alm_map_T), 3))
+    data = np.zeros((len(alm_map_T), 3), dtype=np.complex)
     data[:, 0] = alm_map_T
     data[:, 1] = alm_map_E
     data[:, 2] = alm_map_B
