@@ -13,7 +13,7 @@ if __name__ == '__main__':
     cls_TT_true, cls_EE_true, cls_BB_true, cls_TE_true = utils.generate_cls(theta_true)
     import matplotlib.pyplot as plt
 
-    snr = cls_TT_true[2:] * (config.bl_gauss ** 2) / (config.noise_covar_I* 4 * np.pi / config.Npix)
+    snr = cls_TT_true[2: * (config.bl_gauss ** 2) / (config.noise_covar_I* 4 * np.pi / config.Npix)
     plt.plot(snr)
     plt.show()
 
