@@ -8,7 +8,7 @@ import matplotlib.pyplot as plt
 
 
 class GRWMH():
-    def __init__(self, l_max, map, proposal_variance, prio_mean, prior_stdd, dim = 6, n_iterations=100):
+    def __init__(self, l_max, map, proposal_variance, prio_mean, prior_stdd, dim = 6, n_iterations=1000):
         self.lmax = l_max
         self.map = map
         self.dim = dim
