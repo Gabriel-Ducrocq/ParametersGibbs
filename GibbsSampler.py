@@ -28,8 +28,6 @@ class GRWMH():
         else:
             new_params = old_params + np.dot(self.proposal_stdd,np.random.normal(loc=0, scale=1, size=self.dimension))
 
-        print("New paramrs")
-        print(new_params)
         cls_tt, cls_ee, cls_bb, cls_te = utils.generate_cls(new_params)
         all_cls_new = np.zeros((len(cls_tt), 3, 3))
         all_cls_new[:, 0, 0] = cls_tt
@@ -47,8 +45,8 @@ class GRWMH():
     def compute_log_likelihood(self, all_inv_cls, alm_map):
         first_product = utils.matrix_product(all_inv_cls, alm_map)
         result = np.sum(np.conjugate(alm_map)*first_product)
-        log_det = utils.compute_log_determinant(all_inv_cls)
 
+        ### It is NOT all_inv_cls here ! We should use the the covariance matrix, not the precision
         log_det =np.sum(np.log([np.linalg.det(cls) for cls in all_inv_cls[2:]]))
 
         print("Overall")

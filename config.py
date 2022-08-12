@@ -15,7 +15,7 @@ LENSING = 'yes'
 OUTPUT_CLASS = 'tCl pCl lCl'
 observations = None
 
-NSIDE = 16
+NSIDE = 32
 Npix = 12*NSIDE**2
 L_MAX_SCALARS = 2*NSIDE
 #L_MAX_SCALARS = 2500

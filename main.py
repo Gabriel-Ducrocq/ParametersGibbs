@@ -48,6 +48,41 @@ if __name__ == '__main__':
     #             gibbs_cr = False, overrelax=False, beta = 0.2)
 
 
+    acceptions.append(accept)
+    h.append(old_s_pix[2000, 0])
+
+    all_cls = np.zeros((len(cls_TT_true), 3, 3))
+    all_cls[:, 0, 0] = cls_TT_true
+    all_cls[:, 1, 1] = cls_EE_true
+    all_cls[:, 2, 2] = cls_BB_trueq
+    all_cls[:, 1, 0] = all_cls[:, 0, 1] = cls_TE_true
+
+    h = []
+    old_s_pix = np.zeros((config.Npix, 3))
+    acceptions = []
+    start = time.time()
+    for i in range(10000):
+        print(i)
+        old_s_pix, accept = crankN.run(deepcopy(old_s_pix), all_cls)
+        print(accept)
+        acceptions.append(accept)
+        h.append(old_s_pix[2000, 0])
+
+
+    end = time.time()
+    print("Time:", end - start)
+    print("Acceptance rate:", np.mean(acceptions))
+
+
+    h = np.array(h)
+
+    print("Mean:", np.mean(h))
+    plt.plot(h)
+    plt.show()
+
+    plt.hist(h, density=True, bins=25)
+    plt.show()
+
     res = centered_gibbs.run(config.COSMO_PARAMS_MEAN)
 
     """

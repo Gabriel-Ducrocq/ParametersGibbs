@@ -2,78 +2,95 @@ import healpy as hp
 import numpy as np
 import config
 import utils
+import copy
+import healpy as hp
 import matplotlib.pyplot as plt
 
 
-a = np.random.normal(size = 100000)*np.sqrt(1/2)
+class GRWMH():
+    def __init__(self, l_max, map, proposal_variance, prio_mean, prior_stdd, dim = 3, n_iterations=100):
+        self.lmax = l_max
+        self.map = map
+        self.dim = dim
+        self.prior_mean = prio_mean
+        self.prior_stdd = prior_stdd
+        self.n_iterations = n_iterations
+        if len(proposal_variance.shape) == 1:
+            self.proposal_variance = np.diag(proposal_variance)
+            self.proposal_stdd = np.diag(np.sqrt(proposal_variance))
+        else:
+            self.proposal_variance = proposal_variance
+            self.proposal_stdd = np.linalg.cholesky(proposal_variance)
 
-plt.hist(a, density=True)
-plt.show()
+    def propose_new_parameters(self, old_params):
+        new_params = old_params + np.dot(self.proposal_stdd, np.random.normal(0, 1, size=self.dim))
+        new_cls_TT, new_cls_EE, new_cls_BB, new_cls_TE = utils.generate_cls(new_params)
+        new_variance = np.zeros((len(new_cls_TT), 3, 3))
+        new_variance[:, 0, 0] = new_cls_TT
+        new_variance[:, 1, 1] = new_cls_EE
+        new_variance[:, 2, 2] = new_cls_BB
+        new_variance[:, 1, 0] = new_cls_TE
+        new_variance[:, 0, 1] = new_cls_TE
 
-cls_TT, cls_EE, cls_BB, cls_TE = utils.generate_cls(config.COSMO_PARAMS_MEAN, pol=True)
+        new_precision, _ = utils.compute_inverse_and_cholesky_constraint_realization(new_variance)
+        return {"params":new_params, "variance":new_variance, "precision":new_precision}
 
-all_cls = np.zeros((len(cls_TT), 3, 3))
-all_cls[:, 0, 0] = cls_TT
-all_cls[:, 1, 1] = cls_EE
-all_cls[:, 2, 2] = cls_BB
-all_cls[:, 1, 0] = all_cls[:, 0, 1] = cls_TE
+    def compute_log_prior(self, params):
+        return -(1/2)*np.sum((params-self.prior_mean)**2/self.prior_stdd**2)
 
+    def compute_log_likelihood(self, precision, variance):
+        one_product = utils.matrix_product(precision, self.map)
+        numerator = -(1/2)*np.dot(np.conj(self.map), one_product)
+        log_det = np.sum(np.log([np.linalg.det(cls) for cls in variance[2:]]))
+        return numerator - (1/2)*log_det
 
+    def compute_log_MH_ratio(self, old_data, new_data):
+        log_lik_part = self.compute_log_likelihood(new_data["precision"], new_data["variance"]) \
+        - self.compute_log_likelihood(old_data["precision"], old_data["variance"])
 
+        log_prior_part = self.compute_log_prior(old_data["params"]) - self.compute_log_prior(old_data["params"])
+        return log_lik_part + log_prior_part
 
+    def run(self, init_params):
+        acceptance = 0
+        h_params = []
+        new_cls_TT, new_cls_EE, new_cls_BB, new_cls_TE = utils.generate_cls(init_params)
+        new_variance = np.zeros((len(new_cls_TT), 3, 3))
+        new_variance[:, 0, 0] = new_cls_TT
+        new_variance[:, 1, 1] = new_cls_EE
+        new_variance[:, 2, 2] = new_cls_BB
+        new_variance[:, 1, 0] = new_cls_TE
+        new_variance[:, 0, 1] = new_cls_TE
 
+        new_precision, _ = utils.compute_inverse_and_cholesky_constraint_realization(new_variance)
+        data = {"params": init_params, "variance": new_variance, "precision": new_precision}
 
+        for i in range(self.n_iterations):
+            print(i)
+            new_data = self.propose_new_parameters(init_params)
+            log_ratio = self.compute_log_MH_ratio(data, new_data)
+            if np.log(np.random.uniform()) < log_ratio:
+                data = copy.deepcopy(new_data)
+                acceptance += 1
 
+            h_params.append(data["params"])
 
-map_I, map_Q, map_U = hp.synfast([cls_TT, cls_EE, cls_BB, cls_TE], lmax=config.L_MAX_SCALARS, nside=config.NSIDE,
-                                 fwhm=config.fwhm_radians, new=True)
-
-alms_t, alms_e, alms_b = hp.map2alm([map_I, map_U, map_Q], lmax=config.L_MAX_SCALARS, pol=True)
-
-hp.almxfl(alms_t, config.bl_gauss, inplace=True)
-hp.almxfl(alms_e, config.bl_gauss, inplace=True)
-hp.almxfl(alms_b, config.bl_gauss, inplace=True)
-
-alms = np.zeros((len(alms_t), 3), dtype=complex)
-alms[:, 0] = alms_t
-alms[:, 1] = alms_e
-alms[:, 2] = alms_b
-
-alms = utils.matrix_product(all_cls, alms)
-
-alms_t = hp.almxfl(alms[:, 0], config.bl_gauss, inplace=False)
-alms_e = hp.almxfl(alms[:, 1], config.bl_gauss, inplace=False)
-alms_b = hp.almxfl(alms[:, 2], config.bl_gauss, inplace=False)
-
-I, Q, U = hp.alm2map([alms_t, alms_e, alms_b], pol=True, nside=config.NSIDE, lmax=config.L_MAX_SCALARS)
-
-
-
-
-
-alms_t, alms_e, alms_b = hp.map2alm([I, U, Q], lmax=config.L_MAX_SCALARS, pol=True)
-
-hp.almxfl(alms_t, 1/config.bl_gauss, inplace=True)
-hp.almxfl(alms_e, 1/config.bl_gauss, inplace=True)
-hp.almxfl(alms_b, 1/config.bl_gauss, inplace=True)
-
-alms = np.zeros((len(alms_t), 3), dtype=complex)
-alms[:, 0] = alms_t
-alms[:, 1] = alms_e
-alms[:, 2] = alms_b
-
-inv_cov, _ = utils.compute_inverse_and_cholesky_constraint_realization(all_cls)
-alms = utils.matrix_product(inv_cov, alms)
-
-alms_t = hp.almxfl(alms[:, 0], 1/config.bl_gauss, inplace=False)
-alms_e = hp.almxfl(alms[:, 1], 1/config.bl_gauss, inplace=False)
-alms_b = hp.almxfl(alms[:, 2], 1/config.bl_gauss, inplace=False)
+        print("Acceptance ratio:", acceptance/self.n_iterations)
+        return np.array(h_params)
 
 
-I, Q, U = hp.alm2map([alms_t, alms_e, alms_b], pol=True, nside=config.NSIDE, lmax=config.L_MAX_SCALARS)
+if __name__ == '__main__':
+    theta_true = config.COSMO_PARAMS_MEAN # + config.COSMO_PARAMS_SIGMA
+    cls_TT_true, cls_EE_true, cls_BB_true, cls_TE_true = utils.generate_cls(theta_true)
+    alm_map_T, alm_map_E, alm_map_B = hp.synalm([cls_TT_true, cls_EE_true, cls_BB_true, cls_TE_true], new=True)
 
+    data = np.zeros((len(alm_map_T), 3))
+    data[:, 0] = alm_map_T
+    data[:, 1] = alm_map_E
+    data[:, 2] = alm_map_B
 
+    np.save("data.npy", data)
 
+    grwmh = GRWMH(config.L_MAX_SCALARS, data, config.proposal_variance, config.COSMO_PARAMS_MEAN, config.COSMO_PARAMS_SIGMA)
+    result = grwmh.run()
 
-
-print(np.abs((map_I - I)/I))
