@@ -40,7 +40,7 @@ class GRWMH():
 
     def compute_log_likelihood(self, precision, variance):
         one_product = utils.matrix_product(precision, self.map)
-        numerator = -(1/2)*np.dot(np.conj(self.map), one_product)
+        numerator = -(1/2)*np.sum(np.conj(self.map)*one_product)
         log_det = np.sum(np.log([np.linalg.det(cls) for cls in variance[2:]]))
         return numerator - (1/2)*log_det
 
