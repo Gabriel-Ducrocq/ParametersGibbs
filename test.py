@@ -92,5 +92,5 @@ if __name__ == '__main__':
     np.save("data.npy", data)
 
     grwmh = GRWMH(config.L_MAX_SCALARS, data, config.proposal_variance, config.COSMO_PARAMS_MEAN, config.COSMO_PARAMS_SIGMA)
-    result = grwmh.run()
+    result = grwmh.run(config.COSMO_PARAMS_MEAN)
 
